@@ -28,14 +28,12 @@ namespace Windows_Forms_App.OptionForms
             try
             {
                 _appState.Transaction(cardNumber, amount);
-
-                MessageBox.Show(
-                    $"You have successfully transferred {amount} to {cardNumber}. Your balance {_appState.SelectedAccount.Balance}"
-                );
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                MessageBox.Show(exception.Message);
+                _appState.Notification.SendNotification(
+                    new Class_Library.Message("Failure", ex.Message)
+                );
 
                 return;
             }

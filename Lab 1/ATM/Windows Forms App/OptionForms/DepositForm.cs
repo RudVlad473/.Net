@@ -35,14 +35,12 @@ namespace Windows_Forms_App.OptionForms
             try
             {
                 _appState.Deposit(depositAmount);
-
-                MessageBox.Show(
-                    $"Operation completed successfully. Your balance is: {_appState.SelectedAccount.Balance}"
-                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _appState.Notification.SendNotification(
+                    new Class_Library.Message("Failure", ex.Message)
+                );
 
                 return;
             }

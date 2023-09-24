@@ -1,5 +1,6 @@
 using Class_Library;
 using Microsoft.Extensions.DependencyInjection;
+using Windows_Forms_App.Classes;
 
 namespace Windows_Forms_App
 {
@@ -23,10 +24,9 @@ namespace Windows_Forms_App
             var mockBank = MockBank.GetMockBank();
 
             var appState = AppState.Instance;
-            appState.Initialize(
-                mockBank,
-                (message) => MessageBox.Show(message.Content, message.Header)
-            );
+            appState.Initialize(mockBank, new WindowNotificationSender().SendNotification);
+
+            appState.Notification.AddNotify(new EmailNotificationSender().SendNotification);
 
             services.AddSingleton(appState);
         }

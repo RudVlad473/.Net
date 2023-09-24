@@ -14,13 +14,9 @@ namespace Windows_Forms_App.OptionForms
 {
     public partial class WithdrawForm : SingleNumericInputForm
     {
-        private readonly AppState _appState;
-
         public WithdrawForm()
         {
             InitializeComponent();
-
-            _appState = AppState.Instance;
 
             submitButton.Click += OnWithdraw;
         }
@@ -39,14 +35,12 @@ namespace Windows_Forms_App.OptionForms
             try
             {
                 _appState.Withdraw(withdrawAmount);
-
-                MessageBox.Show(
-                    $"You have successfully withdrawn {withdrawAmount} from your account. Your balance {_appState.SelectedAccount.Balance}"
-                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _appState.Notification.SendNotification(
+                    new Class_Library.Message("Failure", ex.Message)
+                );
 
                 return;
             }

@@ -69,16 +69,14 @@ namespace Windows_Forms_App
             try
             {
                 _appState.Authenticate(new Credentials(CardNumberTextBox.Text, PinTextBox.Text));
-
-                MessageBox.Show(
-                    $"Hello, {_appState.SelectedAccount.OwnerFirstName} {_appState.SelectedAccount.OwnerLastName}"
-                );
             }
             catch (Exception ex)
             {
                 if (_attempts >= _maxAttempts)
                 {
-                    MessageBox.Show("Too many attempts");
+                    _appState.Notification.SendNotification(
+                        new Class_Library.Message("Failure", "Too many attempts")
+                    );
 
                     Application.Exit();
                 }

@@ -54,7 +54,7 @@ namespace Windows_Forms_App
 
             MessageBox.Show($"ATM #{atmId} selected");
 
-            if (_appState.SelectedAccount != null)
+            if (_appState.IsCardSelected())
             {
                 var selectOptionForm = new SelectOptionForm();
 

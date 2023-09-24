@@ -1,10 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "cCcmF3/D3m6E0XdQz68iB6PbZtU8tYgFdsiuTXjLUoOJo59IJh294odtiSiE67CIMTXr/nEEXsflUMnN1A6BRQ==",
+  "dgSpecHash": "eQxsocDTeYrb4kYaZRWFYs5c4nyqAqhZI9s2BH0U1kzVSEIUVTJJ7KK5qgiY4nj5K6zdbCmqX+Kz82x4XVz8hg==",
   "success": true,
   "projectFilePath": "D:\\UNIC\\.Net\\Lab 1\\ATM\\Windows Forms App\\Windows Forms App.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\mailkit\\4.2.0\\mailkit.4.2.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\mimekit\\4.2.0\\mimekit.4.2.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.formats.asn1\\7.0.0\\system.formats.asn1.7.0.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.security.cryptography.pkcs\\7.0.2\\system.security.cryptography.pkcs.7.0.2.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.text.encoding.codepages\\7.0.0\\system.text.encoding.codepages.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

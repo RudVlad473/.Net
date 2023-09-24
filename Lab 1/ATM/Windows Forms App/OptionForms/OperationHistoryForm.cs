@@ -24,7 +24,7 @@ namespace Windows_Forms_App.OptionForms
 
         public void InitializeOperationHistory()
         {
-            var operationHistory = _appState.SelectedAccount?.Operations;
+            var operationHistory = _appState?.Operations;
 
             if (operationHistory == null)
             {
@@ -52,7 +52,7 @@ namespace Windows_Forms_App.OptionForms
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            var filteredOperations = _appState.SelectedAccount?.Operations
+            var filteredOperations = _appState?.Operations
                 .Where(operation => operation.Timestamp.Date == DateTime.Today.Date)
                 .ToList();
 
@@ -61,7 +61,7 @@ namespace Windows_Forms_App.OptionForms
 
         private void weekButton_Click(object sender, EventArgs e)
         {
-            var filteredOperations = _appState.SelectedAccount?.Operations
+            var filteredOperations = _appState?.Operations
                 .Where(operation => operation.Timestamp.Date >= DateTime.Today.AddDays(-7).Date)
                 .ToList();
 
@@ -70,7 +70,7 @@ namespace Windows_Forms_App.OptionForms
 
         private void monthButton_Click(object sender, EventArgs e)
         {
-            var filteredOperations = _appState.SelectedAccount?.Operations
+            var filteredOperations = _appState?.Operations
                 .Where(operation => operation.Timestamp.Date >= DateTime.Today.AddMonths(-1).Date)
                 .ToList();
 

@@ -22,7 +22,7 @@ namespace Windows_Forms_App
 
             _appState = AppState.Instance;
 
-            if (_appState.SelectedAccount == null)
+            if (!_appState.IsCardSelected())
             {
                 MessageBox.Show("Please select an account");
 
@@ -74,7 +74,7 @@ namespace Windows_Forms_App
             switch (operation)
             {
                 case OperationType.Balance:
-                    MessageBox.Show($"Your balance is {_appState.SelectedAccount.Balance}");
+                    _appState.Balance();
 
                     break;
                 case OperationType.Withdraw:
