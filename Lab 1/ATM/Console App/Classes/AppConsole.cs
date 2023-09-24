@@ -1,5 +1,4 @@
 ﻿using Class_Library;
-using Class_Library.Utils;
 using ConsoleTables;
 using System;
 using System.Collections.Generic;
@@ -13,11 +12,16 @@ namespace Console_App.Classes
 {
     public static class AppConsole
     {
-        public static string GetClassListAsTable<T>(List<T> instances, bool shouldEnumerate = false)
+        public delegate void StringPredicateDelegate(string input);
+
+        public static ConsoleTable? GetClassListAsTable<T>(
+            List<T> instances,
+            bool shouldEnumerate = false
+        )
         {
             if (instances == null || instances.Count == 0)
             {
-                return "";
+                return null;
             }
 
             Type type = typeof(T);
@@ -64,9 +68,10 @@ namespace Console_App.Classes
                 rows.ForEach(row => table.AddRow(row.ToArray()));
             }
 
+            table.Options.EnableCount = false;
             table.Options.NumberAlignment = Alignment.Right;
 
-            return table.ToString();
+            return table;
         }
 
         public static ConsoleTable GetEnumeratedTable(
@@ -95,10 +100,10 @@ namespace Console_App.Classes
 
         public static string ReadValidatedValue(
             Predicate<string>? ValidateValue,
-            Action? OnValidationFailed
+            StringPredicateDelegate? OnValidationFailed
         )
         {
-            string result;
+            string result = "";
 
             while (true)
             {
@@ -111,7 +116,7 @@ namespace Console_App.Classes
                     break;
                 }
 
-                OnValidationFailed?.Invoke();
+                OnValidationFailed?.Invoke(result);
             }
 
             return result;
@@ -120,10 +125,12 @@ namespace Console_App.Classes
         public static string ReadValidatedValueWithLabel(
             string label,
             Predicate<string>? ValidateValue,
-            Action? OnValidationFailed
+            StringPredicateDelegate? OnValidationFailed
         )
         {
             WriteLine(label);
+
+            WriteLine();
 
             var validatedValue = ReadValidatedValue(ValidateValue, OnValidationFailed);
 
@@ -147,7 +154,7 @@ namespace Console_App.Classes
                 ReadValidatedValueWithLabel(
                     $"Select {enumDisplayName.ToLower()}: \n\n{enumTable}",
                     enumNum => int.Parse(enumNum) > 0 && int.Parse(enumNum) <= enumNames.Count,
-                    () => WriteLine("Invalid index. Please try again.")
+                    (value) => WriteLine("Invalid index. Please try again.")
                 )
             );
 

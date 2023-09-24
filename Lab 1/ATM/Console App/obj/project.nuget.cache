@@ -1,10 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "yTsWqxhFReYzxXY2oBufo7wPBDVUuddiLALFajgMTbEF4xDE66roUsfJTHTT19yWmQuSFFoDFfOf6TMZz+hy0A==",
+  "dgSpecHash": "ApKcqgc/92T6pQ+53gqdcJoE+uvALfR5xnLAq9U20uiwrG4xDdnwVMnE8yZEyD5CueQsqd6DONwRoB+UYK6UJQ==",
   "success": true,
   "projectFilePath": "D:\\UNIC\\.Net\\Lab 1\\ATM\\Console App\\Console App.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\consoletables\\2.5.0\\consoletables.2.5.0.nupkg.sha512"
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\consoletables\\2.5.0\\consoletables.2.5.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\mailkit\\4.2.0\\mailkit.4.2.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\mimekit\\4.2.0\\mimekit.4.2.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.formats.asn1\\7.0.0\\system.formats.asn1.7.0.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.security.cryptography.pkcs\\7.0.2\\system.security.cryptography.pkcs.7.0.2.nupkg.sha512",
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\system.text.encoding.codepages\\7.0.0\\system.text.encoding.codepages.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

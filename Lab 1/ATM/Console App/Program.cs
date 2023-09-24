@@ -9,7 +9,9 @@ var mockBank = MockBank.GetMockBank();
 
 var appState = AppState.Instance;
 
-appState.Initialize(mockBank, new ConsoleNotification().SendNotification);
+appState.Initialize(mockBank, new ConsoleNotificationSender().SendNotification);
+
+appState.Notification.AddNotify(new EmailNotificationSender("rudenkovladimir2003@gmail.com").SendNotification);
 
 // select atm
 WriteLine(
@@ -31,13 +33,11 @@ var atmNum = int.Parse(
 
             return validAtmMachineNum;
         },
-        () => WriteLine("Invalid ATM machine number. Please try again.")
+        (value) => WriteLine("Invalid ATM machine number. Please try again.")
     )
 );
 
 appState.SelectAtm(appState.Atms[atmNum - 1].Id);
-
-Clear();
 
 WriteLine(AppConsole.GetClassListAsTable(new List<ATM> { appState.SelectedAtm }));
 
@@ -45,24 +45,20 @@ WriteLine(AppConsole.GetClassListAsTable(new List<ATM> { appState.SelectedAtm })
 for (int attempts = 0; attempts < MAX_ATTEMPTS; attempts++)
 {
     var cardNumber = AppConsole.ReadValidatedValueWithLabel(
-        "Input card number:",
+        "Input card number (format: 0000 0000 0000 0000):",
         Credentials.ValidateCardNumber,
-        () => WriteLine("Invalid card number or format. Please try again.")
+        (value) => WriteLine("Invalid card number or format. Please try again.")
     );
 
     var pin = AppConsole.ReadValidatedValueWithLabel(
-        "Input pin:",
+        "Input pin (format: 0000):",
         Credentials.ValidatePin,
-        () => WriteLine("Invalid pin or format. Please try again. ")
+        (value) => WriteLine("Invalid pin or format. Please try again. ")
     );
 
     try
     {
         appState.Authenticate(new Credentials(cardNumber, pin));
-
-        WriteLine(
-            $"Welcome, {appState.SelectedAccount.OwnerFirstName} {appState.SelectedAccount.OwnerLastName}!"
-        );
 
         break;
     }
@@ -74,15 +70,15 @@ for (int attempts = 0; attempts < MAX_ATTEMPTS; attempts++)
 
         if (attempts == MAX_ATTEMPTS - 1)
         {
-            WriteLine("You have exceeded the maximum number of attempts. The card is blocked.");
+            appState.Notification.SendNotification(
+                new Message("Failure", "You have exceeded the maximum number of attempts.")
+            );
             Environment.Exit(0);
         }
 
-        WriteLine($"Attempts left: {MAX_ATTEMPTS - attempts - 1}");
+        WriteLine($"Attempts left: {MAX_ATTEMPTS - attempts}");
     }
 }
-
-Clear();
 
 // select operation
 
@@ -101,21 +97,17 @@ while (true)
                 AppConsole.ReadValidatedValueWithLabel(
                     "Input amount to deposit:",
                     value => decimal.Parse(value) > 0,
-                    () => WriteLine("Invalid amount. Please try again.")
+                    (value) => WriteLine("Invalid amount. Please try again.")
                 )
             );
 
             try
             {
                 appState.Deposit(depositAmount);
-
-                WriteLine(
-                    $"Operation completed successfully. Your balance is: {appState.SelectedAccount.Balance}"
-                );
             }
             catch (Exception e)
             {
-                WriteLine($"Operation failed. Details: {e.Message}");
+                appState.Notification.SendNotification(new Message("Failure", e.Message));
 
                 continue;
             }
@@ -126,23 +118,17 @@ while (true)
                 AppConsole.ReadValidatedValueWithLabel(
                     "Input amount to withdraw:",
                     value => decimal.TryParse(value, out decimal _),
-                    () => WriteLine("Invalid amount. Please try again.")
+                    (value) => WriteLine("Invalid amount. Please try again.")
                 )
             );
 
             try
             {
                 appState.Withdraw(withdrawAmount);
-
-                WriteLine(
-                    $"Operation completed successfully. Your balance is: {appState.SelectedAccount.Balance}"
-                );
             }
             catch (Exception e)
             {
-                WriteLine(e.Message);
-
-                WriteLine($"Operation failed. Details: {e.Message}");
+                appState.Notification.SendNotification(new Message("Failure", e.Message));
 
                 continue;
             }
@@ -152,30 +138,24 @@ while (true)
             var transactionCardNumber = AppConsole.ReadValidatedValueWithLabel(
                 "Input card number:",
                 Credentials.ValidateCardNumber,
-                () => WriteLine("Invalid card number. Please try again.")
+                (value) => WriteLine("Invalid card number. Please try again.")
             );
 
             var amountToTransfer = decimal.Parse(
                 AppConsole.ReadValidatedValueWithLabel(
                     "Input amount to transfer:",
                     value => decimal.Parse(value) > 0,
-                    () => WriteLine("Invalid amount. Please try again.")
+                    (value) => WriteLine("Invalid amount. Please try again.")
                 )
             );
 
             try
             {
                 appState.Transaction(transactionCardNumber, amountToTransfer);
-
-                WriteLine(
-                    $"Operation completed successfully. Your balance is: {appState.SelectedAccount.Balance}"
-                );
             }
             catch (Exception e)
             {
-                WriteLine(e.Message);
-
-                WriteLine($"Operation failed. Details: {e.Message}");
+                appState.Notification.SendNotification(new Message("Failure", e.Message));
 
                 continue;
             }
@@ -184,14 +164,16 @@ while (true)
         case OperationType.NearestAtms:
             var nearestAtms = appState.GetNearestAtms();
 
-            if (nearestAtms == null)
+            if (nearestAtms == null || nearestAtms.Count == 0)
             {
-                WriteLine("No nearest ATMs found.");
+                appState.Notification.SendNotification(new Message(null, "No nearest ATMs found."));
 
                 continue;
             }
 
-            WriteLine(AppConsole.GetClassListAsTable(nearestAtms));
+            appState.Notification.SendNotification(
+                new Message("Nearest ATMs", AppConsole.GetClassListAsTable(nearestAtms).ToString())
+            );
 
             break;
         case OperationType.Exit:
@@ -201,7 +183,7 @@ while (true)
 
             break;
         case OperationType.Balance:
-            WriteLine($"Your balance is {appState.SelectedAccount.Balance}");
+            appState.Balance();
 
             break;
         case OperationType.OperationsHistory:
@@ -212,13 +194,13 @@ while (true)
             switch (period)
             {
                 case Period.Today:
-                    operations = appState.SelectedAccount.Operations
+                    operations = appState.Operations
                         .Where(operation => operation.Timestamp.Date == DateTime.Now.Date)
                         .ToList();
 
                     break;
                 case Period.ThisWeek:
-                    operations = appState.SelectedAccount.Operations
+                    operations = appState.Operations
                         .Where(
                             operation => operation.Timestamp.Date >= DateTime.Now.Date.AddDays(-7)
                         )
@@ -226,7 +208,7 @@ while (true)
 
                     break;
                 case Period.ThisMonth:
-                    operations = appState.SelectedAccount.Operations
+                    operations = appState.Operations
                         .Where(
                             operation =>
                                 operation.Timestamp.Date >= DateTime.Now.Date.AddMonths(-1).Date
@@ -235,14 +217,18 @@ while (true)
 
                     break;
                 default:
-                    operations = appState.SelectedAccount.Operations;
+                    operations = appState.Operations;
 
                     break;
             }
 
-            WriteLine($"{TextFormatter.SplitCamelCase(period.ToString())}'s operations:");
-
-            WriteLine(AppConsole.GetClassListAsTable(operations));
+            appState.Notification.SendNotification(
+                new Message(
+                    $"{TextFormatter.SplitCamelCase(period.ToString())}'s operations",
+                    AppConsole.GetClassListAsTable(operations)?.ToMinimalString()
+                        ?? "No operations found."
+                )
+            );
 
             break;
         default:
