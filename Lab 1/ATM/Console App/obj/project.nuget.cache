@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "G5d7oVoOuaWwEtuUQinYl8hBh7CvEVV9jOgjH+G8ZdB96u2kDlIYQzlS4ttDICjte93HhPskyDjN40tuDVJ4BA==",
+  "dgSpecHash": "yTsWqxhFReYzxXY2oBufo7wPBDVUuddiLALFajgMTbEF4xDE66roUsfJTHTT19yWmQuSFFoDFfOf6TMZz+hy0A==",
   "success": true,
   "projectFilePath": "D:\\UNIC\\.Net\\Lab 1\\ATM\\Console App\\Console App.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\consoletables\\2.5.0\\consoletables.2.5.0.nupkg.sha512"
+  ],
   "logs": []
 }

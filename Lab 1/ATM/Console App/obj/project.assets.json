@@ -1,11 +1,59 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "ConsoleTables/2.5.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/ConsoleTables.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/ConsoleTables.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "Class Library/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Class Library.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Class Library.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "ConsoleTables/2.5.0": {
+      "sha512": "lfXLGH1coDInONveyIW5ufJWT/P5KbMRRV0cbR7CBnoZLNLZeTY51QUrAmtsX+gIWj7xlY9FSmg1sBYhXMmuuw==",
+      "type": "package",
+      "path": "consoletables/2.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Readme.md",
+        "consoletables.2.5.0.nupkg.sha512",
+        "consoletables.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/ConsoleTables.dll",
+        "lib/netstandard2.1/ConsoleTables.pdb"
+      ]
+    },
+    "Class Library/1.0.0": {
+      "type": "project",
+      "path": "../Class Library/Class Library.csproj",
+      "msbuildProject": "../Class Library/Class Library.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "Class Library >= 1.0.0",
+      "ConsoleTables >= 2.5.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\": {},
@@ -38,7 +86,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\UNIC\\.Net\\Lab 1\\ATM\\Class Library\\Class Library.csproj": {
+              "projectPath": "D:\\UNIC\\.Net\\Lab 1\\ATM\\Class Library\\Class Library.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -50,6 +102,12 @@
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
+        "dependencies": {
+          "ConsoleTables": {
+            "target": "Package",
+            "version": "[2.5.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
