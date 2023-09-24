@@ -1,3 +1,6 @@
+using Class_Library;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Windows_Forms_App
 {
     internal static class Program
@@ -8,10 +11,24 @@ namespace Windows_Forms_App
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new SelectAtmForm());
+        }
+
+        public static void ConfigureServices(IServiceCollection services)
+        {
+            var mockBank = MockBank.GetMockBank();
+
+            var appState = AppState.Instance;
+            appState.Initialize(
+                mockBank,
+                (message) => MessageBox.Show(message.Content, message.Header)
+            );
+
+            services.AddSingleton(appState);
         }
     }
 }

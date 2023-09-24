@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ijT65956VusYiZjv4oovx/YEGJTV0n+XhFp18uxR/4VYDAFgAFiEMJFZEEx4gx74OHJKxN3xx5iFEHvVhFjD0w==",
+  "dgSpecHash": "cCcmF3/D3m6E0XdQz68iB6PbZtU8tYgFdsiuTXjLUoOJo59IJh294odtiSiE67CIMTXr/nEEXsflUMnN1A6BRQ==",
   "success": true,
   "projectFilePath": "D:\\UNIC\\.Net\\Lab 1\\ATM\\Windows Forms App\\Windows Forms App.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Vladelec_Podzelemij\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
