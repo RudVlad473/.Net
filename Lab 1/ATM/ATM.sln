@@ -3,11 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows Forms App", "Windows Forms App\Windows Forms App.csproj", "{6F39626C-565D-4640-A985-820533EA7E40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Windows Forms App", "Windows Forms App\Windows Forms App.csproj", "{6F39626C-565D-4640-A985-820533EA7E40}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9082A16A-FE30-4934-BD08-A40D0828C7AF} = {9082A16A-FE30-4934-BD08-A40D0828C7AF}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console App", "Console App\Console App.csproj", "{ADEA1E67-AEA7-4C62-88E9-2CAA9E21A660}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console App", "Console App\Console App.csproj", "{ADEA1E67-AEA7-4C62-88E9-2CAA9E21A660}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Class Library", "Class Library\Class Library.csproj", "{9082A16A-FE30-4934-BD08-A40D0828C7AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Class Library", "Class Library\Class Library.csproj", "{9082A16A-FE30-4934-BD08-A40D0828C7AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{555D32F5-E8EE-403C-B5C5-DACE511832CE}"
+	ProjectSection(SolutionItems) = preProject
+		.csharpierrc.json = .csharpierrc.json
+		app.config = app.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
