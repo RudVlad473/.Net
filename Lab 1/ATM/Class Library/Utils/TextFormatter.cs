@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Class_Library.Utils
+namespace Class_Library
 {
     public static class TextFormatter
     {

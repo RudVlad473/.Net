@@ -20,7 +20,17 @@ namespace Class_Library
 
         public bool IsNear(Address address)
         {
-            return City == address.City && Street == address.Street;
+            return IsSameCity(address) && IsSameStreet(address);
+        }
+
+        public bool IsSameStreet(Address address)
+        {
+            return Street == address.Street;
+        }
+
+        public bool IsSameCity(Address address)
+        {
+            return City == address.City;
         }
 
         public override string ToString()

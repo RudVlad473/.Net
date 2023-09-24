@@ -6,20 +6,13 @@ using System.Threading.Tasks;
 
 namespace Class_Library
 {
-    public enum OperationType
-    {
-        Deposit,
-        Withdrawal,
-        Transaction
-    }
-
-    public class Option
+    public class Operation
     {
         public DateTime Timestamp { get; private set; }
         public OperationType Type { get; private set; }
         public decimal Payload { get; private set; }
 
-        public Option(OperationType type, decimal payload)
+        public Operation(OperationType type, decimal payload)
         {
             Timestamp = DateTime.Now;
             Type = type;

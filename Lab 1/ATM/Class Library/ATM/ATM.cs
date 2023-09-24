@@ -11,8 +11,6 @@ namespace Class_Library
         public string Id { get; private set; }
         public Address LocationAddress { get; private set; }
 
-        public override decimal Balance { get; set; }
-
         // Constructor
         public ATM(Address locationAddress, decimal balance = 0)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Class_Library
 {
-    public enum Options
+    public enum OperationType
     {
         Withdraw,
         Deposit,

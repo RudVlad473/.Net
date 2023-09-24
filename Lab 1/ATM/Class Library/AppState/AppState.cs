@@ -3,11 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Class_Library;
 
 namespace Class_Library
 {
     public class AppState
     {
+        public ATM? SelectedAtm { get; private set; }
+        public Account? SelectedAccount { get; private set; }
+        private Bank? Bank { get; set; }
+        public List<ATM>? Atms
+        {
+            get
+            {
+                if (Bank == null)
+                {
+                    return null;
+                }
+
+                return Bank.Atms;
+            }
+        }
+
+        public delegate void Notify(IMessage message);
+
+        private Notify notify;
+
         private static readonly AppState _instance = new AppState();
 
         public static AppState Instance
@@ -15,28 +36,38 @@ namespace Class_Library
             get { return _instance; }
         }
 
-        private AppState() { }
-
-        public void Initialize(List<ATM> atms, List<Account> accounts)
+        public void AddNotify(Notify notify)
         {
-            Atms = atms;
-            Accounts = accounts;
+            this.notify += notify;
         }
 
-        public ATM? SelectedAtm { get; private set; }
-        public Account? SelectedAccount { get; private set; }
-        public List<ATM>? Atms { get; private set; }
-        public List<Account>? Accounts { get; private set; }
+        public void SendNotification(IMessage message)
+        {
+            notify.Invoke(message);
+        }
 
-        //public AppState(List<ATM> atms, List<Account> accounts)
-        //{
-        //    Atms = atms;
-        //    Accounts = accounts;
-        //}
+        public void Initialize(Bank bank, Notify notify)
+        {
+            Bank = bank;
+
+            AddNotify(notify);
+        }
+
+        public void Authenticate(Credentials credentials)
+        {
+            var account = Bank?.Authenticate(credentials);
+
+            if (account == null)
+            {
+                SendNotification(new Message("Not Found", "Account not found"));
+            }
+
+            SelectedAccount = account;
+        }
 
         public void SelectAtm(string atmId)
         {
-            var atm = Atms?.Where(atm => atm.Id == atmId).FirstOrDefault();
+            var atm = Bank?.Atms?.Where(atm => atm.Id == atmId).FirstOrDefault();
 
             if (atm == null)
             {
@@ -46,11 +77,9 @@ namespace Class_Library
             SelectedAtm = atm;
         }
 
-        public void SelectAccount(string cardNumber)
+        public void SelectAccount(Credentials credentials)
         {
-            var account = Accounts
-                ?.Where(account => account.CardNumber == cardNumber)
-                .FirstOrDefault();
+            var account = Bank?.Authenticate(credentials);
 
             if (account == null)
             {
@@ -67,17 +96,18 @@ namespace Class_Library
                 throw new Exception("ATM not selected");
             }
 
-            var nearestAtms = Atms?.Where(atm =>
-            {
-                if (atm.Id == SelectedAtm.Id)
+            var nearestAtms = Bank.Atms
+                ?.Where(atm =>
                 {
-                    return false;
-                }
+                    bool isSameAtm = atm.Id == SelectedAtm.Id;
 
-                bool areAtmsNear = SelectedAtm.LocationAddress.IsNear(atm.LocationAddress);
+                    if (isSameAtm)
+                    {
+                        return false;
+                    }
 
-                return areAtmsNear;
-            })
+                    return SelectedAtm.LocationAddress.IsNear(atm.LocationAddress);
+                })
                 .ToList();
 
             return nearestAtms;
@@ -100,7 +130,12 @@ namespace Class_Library
                 throw new Exception("Insufficient funds");
             }
 
-            SelectedAccount.Withdraw(amount);
+            bool isEnoughMoney = SelectedAccount.Withdraw(amount);
+
+            if (!isEnoughMoney)
+            {
+                throw new Exception("Not enough money");
+            }
             SelectedAtm.Deposit(amount);
         }
 
@@ -120,7 +155,7 @@ namespace Class_Library
             SelectedAtm.Deposit(amount);
         }
 
-        public void Transaction(string cardNumber, decimal amount)
+        public void Transaction(string targetCardNumber, decimal amount)
         {
             if (SelectedAccount == null)
             {
@@ -132,22 +167,7 @@ namespace Class_Library
                 throw new Exception("ATM not selected");
             }
 
-            var targetAccount = Accounts
-                ?.Where(account => account.CardNumber == cardNumber)
-                .FirstOrDefault();
-
-            if (targetAccount == null)
-            {
-                throw new Exception("Account not found");
-            }
-
-            if (SelectedAccount.Balance < amount)
-            {
-                throw new Exception("Insufficient funds");
-            }
-
-            SelectedAccount.Withdraw(amount);
-            targetAccount.Deposit(amount);
+            Bank.Transaction(SelectedAccount, targetCardNumber, amount);
         }
 
         public void Exit()

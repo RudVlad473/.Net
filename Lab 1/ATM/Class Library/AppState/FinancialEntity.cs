@@ -8,7 +8,7 @@ namespace Class_Library
 {
     public abstract class FinancialEntity
     {
-        public abstract decimal Balance { get; set; }
+        public decimal Balance { get; protected set; }
 
         public virtual void Deposit(decimal amount)
         {
