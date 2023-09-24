@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Class_Library
 {
@@ -9,15 +10,23 @@ namespace Class_Library
         public string OwnerFirstName { get; set; }
         public string OwnerLastName { get; set; }
         public List<Operation> Operations { get; set; } = new List<Operation>();
+        public string Email { get; set; }
 
         // Constructor
         public Account(
             Credentials credentials,
             string ownerLastName,
             string ownerFirstName,
-            decimal balance
+            decimal balance,
+            string email
         )
         {
+            var emailValidator = new EmailAddressAttribute();
+            if (!emailValidator.IsValid(email))
+            {
+                throw new Exception("Invalid email address");
+            }
+            Email = email;
             Credentials = credentials;
             OwnerLastName = ownerLastName;
             OwnerFirstName = ownerFirstName;
@@ -34,9 +43,16 @@ namespace Class_Library
 
         public override bool Withdraw(decimal amount)
         {
+            bool isEnoughMoney = base.Withdraw(amount);
+
+            if (!isEnoughMoney)
+            {
+                return false;
+            }
+
             Operations.Add(new Operation(OperationType.Withdraw, amount));
 
-            return base.Withdraw(amount);
+            return true;
         }
 
         public override void Deposit(decimal amount)

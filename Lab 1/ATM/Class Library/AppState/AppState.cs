@@ -10,7 +10,7 @@ namespace Class_Library
     public class AppState
     {
         public ATM? SelectedAtm { get; private set; }
-        public Account? SelectedAccount { get; private set; }
+        private Account? SelectedAccount { get; set; }
         private Bank? Bank { get; set; }
         public List<ATM>? Atms
         {
@@ -21,13 +21,18 @@ namespace Class_Library
                     return null;
                 }
 
-                return Bank.Atms;
+                return Bank.Atms.OrderByDescending(atm => atm.Balance).ToList();
             }
         }
-
-        public delegate void Notify(IMessage message);
-
-        private Notify notify;
+        public List<Operation> Operations
+        {
+            get
+            {
+                return SelectedAccount.Operations
+                    .OrderBy(operation => operation.Timestamp)
+                    .ToList();
+            }
+        }
 
         private static readonly AppState _instance = new AppState();
 
@@ -36,21 +41,28 @@ namespace Class_Library
             get { return _instance; }
         }
 
-        public void AddNotify(Notify notify)
-        {
-            this.notify += notify;
-        }
+        public Notification Notification { get; private set; }
 
-        public void SendNotification(IMessage message)
-        {
-            notify.Invoke(message);
-        }
-
-        public void Initialize(Bank bank, Notify notify)
+        public void Initialize(Bank bank, Notification.Notify notify)
         {
             Bank = bank;
 
-            AddNotify(notify);
+            this.Notification = new Notification(notify);
+        }
+
+        public string GetCardOwnerName()
+        {
+            if (SelectedAccount == null)
+            {
+                throw new Exception("Account not selected");
+            }
+
+            return SelectedAccount.OwnerFirstName + " " + SelectedAccount.OwnerLastName;
+        }
+
+        public bool IsCardSelected()
+        {
+            return SelectedAccount != null;
         }
 
         public void Authenticate(Credentials credentials)
@@ -59,10 +71,14 @@ namespace Class_Library
 
             if (account == null)
             {
-                SendNotification(new Message("Not Found", "Account not found"));
+                Notification.SendNotification(new Message("Not Found", "Account not found"));
             }
 
             SelectedAccount = account;
+
+            Notification.SendNotification(
+                new Message("Success", $"Authenticated as {GetCardOwnerName()}")
+            );
         }
 
         public void SelectAtm(string atmId)
@@ -136,7 +152,10 @@ namespace Class_Library
             {
                 throw new Exception("Not enough money");
             }
+
             SelectedAtm.Deposit(amount);
+
+            Notification.SendNotification(new Message("Success", $"Withdrawn {amount}"));
         }
 
         public void Deposit(decimal amount)
@@ -153,6 +172,8 @@ namespace Class_Library
 
             SelectedAccount.Deposit(amount);
             SelectedAtm.Deposit(amount);
+
+            Notification.SendNotification(new Message("Success", $"Deposited {amount}"));
         }
 
         public void Transaction(string targetCardNumber, decimal amount)
@@ -168,6 +189,17 @@ namespace Class_Library
             }
 
             Bank.Transaction(SelectedAccount, targetCardNumber, amount);
+
+            Notification.SendNotification(
+                new Message("Success", $"Transaction {amount} to '{targetCardNumber}'")
+            );
+        }
+
+        public void Balance()
+        {
+            Notification.SendNotification(
+                new Message("Balance", $"Your balance is: {SelectedAccount?.Balance}")
+            );
         }
 
         public void Exit()

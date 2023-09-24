@@ -75,5 +75,32 @@ namespace Class_Library
 
             return -1;
         }
+
+        public static bool operator ==(Credentials cred1, Credentials cred2)
+        {
+            if (ReferenceEquals(cred1, null) && ReferenceEquals(cred2, null))
+            {
+                return true; // Both objects are null, consider them equal.
+            }
+
+            if (ReferenceEquals(cred1, null) || ReferenceEquals(cred2, null))
+            {
+                return false; // One of the objects is null, they are not equal.
+            }
+
+            // Implement your custom equality comparison logic here.
+            // For example, compare CardNumber and Pin.
+            return cred1.CardNumber == cred2.CardNumber && cred1.Pin == cred2.Pin;
+        }
+
+        public static bool operator !=(Credentials cred1, Credentials cred2)
+        {
+            if (cred1 == cred2)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
